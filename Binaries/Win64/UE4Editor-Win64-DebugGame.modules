@@ -1,0 +1,8 @@
+{
+	"Changelist" : 3088355,
+	"BuildId" : "4cb42c9a-2512-460a-b4da-783555db8246",
+	"Modules" : 
+	{
+		"VRExpansionPlugin" : "UE4Editor-VRExpansionPlugin-Win64-DebugGame.dll"
+	}
+}
