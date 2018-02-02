@@ -410,9 +410,14 @@ void UVRStereoWidgetComponent::UpdateRenderTarget(FIntPoint DesiredRenderTargetS
 }
 
 /** Represents a billboard sprite to the scene manager. */
-class FStereoWidget3DSceneProxy : public FPrimitiveSceneProxy
+class FStereoWidget3DSceneProxy final : public FPrimitiveSceneProxy
 {
 public:
+	SIZE_T GetTypeHash() const override
+	{
+		static size_t UniquePointer;
+		return reinterpret_cast<size_t>(&UniquePointer);
+	}
 	/** Initialization constructor. */
 	FStereoWidget3DSceneProxy(UVRStereoWidgetComponent* InComponent, ISlate3DRenderer& InRenderer)
 		: FPrimitiveSceneProxy(InComponent)
@@ -479,7 +484,7 @@ public:
 
 					for (int32 ViewIndex = 0; ViewIndex < Views.Num(); ViewIndex++)
 					{
-						FDynamicMeshBuilder MeshBuilder;
+						FDynamicMeshBuilder MeshBuilder(Views[ViewIndex]->GetFeatureLevel());
 
 						if (VisibilityMap & (1 << ViewIndex))
 						{
@@ -514,7 +519,7 @@ public:
 
 					for (int32 ViewIndex = 0; ViewIndex < Views.Num(); ViewIndex++)
 					{
-						FDynamicMeshBuilder MeshBuilder;
+						FDynamicMeshBuilder MeshBuilder(Views[ViewIndex]->GetFeatureLevel());
 
 						if (VisibilityMap & (1 << ViewIndex))
 						{
@@ -693,9 +698,15 @@ FPrimitiveSceneProxy* UVRStereoWidgetComponent::CreateSceneProxy()
 	if (MaterialInstance)
 	{
 		MaterialInstance = nullptr;
+	
 	}
 	
-	if (Space != EWidgetSpace::Screen && WidgetRenderer.IsValid())
+	if (Space == EWidgetSpace::Screen)
+	{
+		return nullptr;
+	}
+
+	if (WidgetRenderer.IsValid() && CurrentSlateWidget.IsValid())
 	{
 		// Create a new MID for the current base material
 		{
