@@ -503,6 +503,13 @@ public:
 		//SafeMoveUpdatedComponent(-AdditionalVRInputVector, UpdatedComponent->GetComponentQuat(), false, AHit);
 	}
 
+	// Rewind the relative movement that we had with the HMD, this is exposed to Blueprint so that custom movement modes can use it to rewind prior to movement actions.
+	UFUNCTION(BlueprintCallable, Category = "VRMovement")
+		void RewindVRMovement()
+	{
+		RewindVRRelativeMovement();
+	}
+
 	bool bWasInPushBack;
 	bool bIsInPushBack;
 	void StartPushBackNotification(FHitResult HitResult);
@@ -547,20 +554,24 @@ public:
 	///* Allow custom handling when character hits a wall while swimming. */
 	//virtual void HandleSwimmingWallHit(const FHitResult& Hit, float DeltaTime);
 
-	// If true will never count a simulating component as the floor, to prevent jitter / physics problems.
+	// If true will never count a physicsbody channel component as the floor, to prevent jitter / physics problems.
+	// Make sure that you set simulating objects to the physics body channel if you want this to work correctly
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VRMovement")
 		bool bIgnoreSimulatingComponentsInFloorCheck;
 
+	// Moved into compute floor dist
 	// Option to Skip simulating components when looking for floor
-	virtual bool FloorSweepTest(
-		FHitResult& OutHit,
+	/*virtual bool FloorSweepTest(
 		const FVector& Start,
+		FHitResult& OutHit,
 		const FVector& End,
 		ECollisionChannel TraceChannel,
 		const struct FCollisionShape& CollisionShape,
 		const struct FCollisionQueryParams& Params,
 		const struct FCollisionResponseParams& ResponseParam
-	) const override;
+	) const override;*/
+
+	virtual void ComputeFloorDist(const FVector& CapsuleLocation, float LineDistance, float SweepDistance, FFindFloorResult& OutFloorResult, float SweepRadius, const FHitResult* DownwardSweepResult = NULL) const override;
 
 	// Need to use actual capsule location for step up
 	virtual bool VRClimbStepUp(const FVector& GravDir, const FVector& Delta, const FHitResult &InHit, FStepDownResult* OutStepDownResult = nullptr);
