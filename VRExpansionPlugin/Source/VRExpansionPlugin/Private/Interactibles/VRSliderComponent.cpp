@@ -499,3 +499,13 @@ void UVRSliderComponent::SetHeld_Implementation(UGripMotionControllerComponent *
 {
 	return FBPInteractionSettings();
 }*/
+
+TArray<UVRGripScriptBase*> UVRSliderComponent::GetGripScripts_Implementation()
+{
+	return TArray<UVRGripScriptBase*>();
+}
+
+bool UVRSliderComponent::HasGripScripts_Implementation()
+{
+	return false;
+}

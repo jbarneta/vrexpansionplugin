@@ -138,4 +138,13 @@ public:
 	// Get interactable settings
 //	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "VRGripInterface")
 //		FBPInteractionSettings GetInteractionSettings();
+
+	// Has Grip Scripts
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "VRGripInterface")
+		bool HasGripScripts();
+
+	// Get grip scripts
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "VRGripInterface")
+		TArray<UVRGripScriptBase*> GetGripScripts();
+
 };

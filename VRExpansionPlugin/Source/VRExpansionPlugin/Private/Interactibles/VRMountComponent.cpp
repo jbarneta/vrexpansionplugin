@@ -525,3 +525,12 @@ void UVRMountComponent::SetHeld_Implementation(UGripMotionControllerComponent * 
 }*/
 
 
+TArray<UVRGripScriptBase*> UVRMountComponent::GetGripScripts_Implementation()
+{
+	return TArray<UVRGripScriptBase*>();
+}
+
+bool UVRMountComponent::HasGripScripts_Implementation()
+{
+	return false;
+}
